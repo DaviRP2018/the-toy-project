@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# python decouple
+settings.ini
+
+# PyCharm
+.idea/
