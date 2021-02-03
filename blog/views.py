@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.views.generic import TemplateView, CreateView
 
 from blog.models import Article
 
@@ -33,6 +33,15 @@ class ArticleCreate(CreateView):
 
 class ArticleApproval(TemplateView):
     template_name = "blog/approval.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["articles"] = Article.objects.all()
+        return context
+
+
+class ArticleEdited(TemplateView):
+    template_name = "blog/edited.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
