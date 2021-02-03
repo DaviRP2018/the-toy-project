@@ -34,8 +34,8 @@
                   Rejected <img src="{% static 'admin/img/icon-no.svg' %}" alt="{{ article.status }}">
                 {% endif %}
               </td>
-              <td><button onclick="gogo(true)" type="button" class="btn btn-success">Approve</button></td>
-              <td><button type="button" class="btn btn-danger">Reject</button></td>
+              <td><button onclick="update_article(true, '{{ article.id }}')" type="button" class="btn btn-success">Approve</button></td>
+              <td><button onclick="update_article(false, '{{ article.id }}')" type="button" class="btn btn-danger">Reject</button></td>
             </tr>
           {% endfor %}
           </tbody>
@@ -47,24 +47,32 @@
   </div>
 
   <script>
-    function gogo(approve) {
-        $.ajaxSetup({
-          beforeSend: function (xhr, settings) {
-            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-          }
-        });
-        $.ajax({
-            type: 'PUT',
-            url: '/article/update_article/update_article/',
-            dataType: 'json',
-            data: {'pk': 2},
-        }).done(function (data, textStatus, jqXHR) {
-            console.log('foii');
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
-        });
+    function update_article(approve, pk) {
+      $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+          xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        }
+      });
+      $.ajax({
+        type: 'PUT',
+        url: 'article/' + pk + '/update_article/',
+        dataType: 'json',
+        data: {
+          'status': approve,
+          'edited_by': {{ request.user.writer.id }}
+        },
+      }).done(function (data, textStatus, jqXHR) {
+        alert("Success!");
+        window.location.reload();
+        console.debug(data);
+        console.debug(textStatus);
+        console.debug(jqXHR);
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert("Failed.");
+        console.debug(jqXHR);
+        console.debug(textStatus);
+        console.debug(errorThrown);
+      });
     }
   </script>
 {% endblock content %}

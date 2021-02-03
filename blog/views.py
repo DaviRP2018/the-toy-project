@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
 from rest_framework import generics, permissions, viewsets, status
 from rest_framework.decorators import api_view, action
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from blog.models import Article
@@ -54,7 +55,7 @@ class ArticleApproval(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.all()
+        context["articles"] = Article.objects.order_by("id")
         return context
 
     def has_permission(self):
@@ -69,7 +70,7 @@ class ArticleEdited(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.filter(edited_by=self.request.user.writer)
+        context["articles"] = Article.objects.filter(edited_by=self.request.user.writer).order_by("id")
         return context
 
     def has_permission(self):
@@ -81,5 +82,9 @@ class ArticleEdited(PermissionRequiredMixin, TemplateView):
 class UpdateArticle(viewsets.ViewSet):
     @action(detail=True, methods=["PUT"])
     def update_article(self, request, pk):
-        # serializer = ArticleSerializer(data=request.data)
-        return Response(status=status.HTTP_200_OK)
+        article = get_object_or_404(Article, id=pk)
+        serializer = ArticleSerializer(data=request.data, instance=article)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
