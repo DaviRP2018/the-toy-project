@@ -34,7 +34,7 @@
                   Rejected <img src="{% static 'admin/img/icon-no.svg' %}" alt="{{ article.status }}">
                 {% endif %}
               </td>
-              <td><button type="button" class="btn btn-success">Approve</button></td>
+              <td><button onclick="gogo(true)" type="button" class="btn btn-success">Approve</button></td>
               <td><button type="button" class="btn btn-danger">Reject</button></td>
             </tr>
           {% endfor %}
@@ -46,4 +46,25 @@
     </div>
   </div>
 
+  <script>
+    function gogo(approve) {
+        $.ajaxSetup({
+          beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+          }
+        });
+        $.ajax({
+            type: 'PUT',
+            url: '/article/update_article/update_article/',
+            dataType: 'json',
+            data: {'pk': 2},
+        }).done(function (data, textStatus, jqXHR) {
+            console.log('foii');
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        });
+    }
+  </script>
 {% endblock content %}

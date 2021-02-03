@@ -6,8 +6,12 @@ from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
+from rest_framework import generics, permissions, viewsets, status
+from rest_framework.decorators import api_view, action
+from rest_framework.response import Response
 
 from blog.models import Article
+from blog.serializers import ArticleSerializer
 
 
 class DashboardView(TemplateView):
@@ -72,3 +76,10 @@ class ArticleEdited(PermissionRequiredMixin, TemplateView):
         if not isinstance(self.request.user, AnonymousUser):
             return self.request.user.writer.is_editor
         return False
+
+
+class UpdateArticle(viewsets.ViewSet):
+    @action(detail=True, methods=["PUT"])
+    def update_article(self, request, pk):
+        # serializer = ArticleSerializer(data=request.data)
+        return Response(status=status.HTTP_200_OK)

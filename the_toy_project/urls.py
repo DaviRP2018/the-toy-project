@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.urls import path, include
 
-from blog.views import DashboardView, ArticleCreate, ArticleApproval, ArticleEdited
+from blog.views import DashboardView, ArticleCreate, ArticleApproval, ArticleEdited, UpdateArticle
 from the_toy_project.views import logout_writer
+
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'article', UpdateArticle, basename="update_article")
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
@@ -27,3 +32,5 @@ urlpatterns = [
     path("article-approval", ArticleApproval.as_view(), name="article_approval"),
     path("article-edited", ArticleEdited.as_view(), name="article_edited"),
 ]
+
+urlpatterns += router.urls
