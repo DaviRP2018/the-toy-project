@@ -1,11 +1,12 @@
 from datetime import timedelta
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
 
-from blog.models import Article
+from blog.models import Article, Writer
 
 
 class DashboardView(TemplateView):
@@ -27,7 +28,7 @@ class DashboardView(TemplateView):
         return context
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(LoginRequiredMixin, CreateView):
     model = Article
     fields = ["title", "content"]
 
@@ -35,7 +36,7 @@ class ArticleCreate(CreateView):
         return reverse("dashboard")
 
 
-class ArticleApproval(TemplateView):
+class ArticleApproval(LoginRequiredMixin, TemplateView):
     template_name = "blog/approval.html"
 
     def get_context_data(self, **kwargs):
@@ -44,7 +45,7 @@ class ArticleApproval(TemplateView):
         return context
 
 
-class ArticleEdited(TemplateView):
+class ArticleEdited(LoginRequiredMixin, TemplateView):
     template_name = "blog/edited.html"
 
     def get_context_data(self, **kwargs):

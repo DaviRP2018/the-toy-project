@@ -13,11 +13,12 @@ class Writer(models.Model):
 @receiver(post_save, sender=User)
 def create_user_writer(sender, instance, created, **kwargs):
     if created:
-        Writer.objects.create(user=instance)
+        Writer.objects.create(user=instance, name=instance.username)
 
 
 @receiver(post_save, sender=User)
 def save_user_writer(sender, instance, **kwargs):
+    instance.writer.name = instance.username
     instance.writer.save()
 
 

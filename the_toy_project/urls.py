@@ -19,6 +19,7 @@ from blog.views import DashboardView, ArticleCreate, ArticleApproval, ArticleEdi
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
+
     path("", DashboardView.as_view(), name="dashboard"),
     path("article", ArticleCreate.as_view(), name="article_create"),
     path("article-approval", ArticleApproval.as_view(), name="article_approval"),
