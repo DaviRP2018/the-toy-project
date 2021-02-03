@@ -9,6 +9,9 @@ class Writer(models.Model):
     is_editor = models.BooleanField(default=False)
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 @receiver(post_save, sender=User)
 def create_user_writer(sender, instance, created, **kwargs):
@@ -33,3 +36,6 @@ class Article(models.Model):
         Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_written_by"
     )
     edited_by = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_edited_by")
+
+    def __str__(self):
+        return self.title

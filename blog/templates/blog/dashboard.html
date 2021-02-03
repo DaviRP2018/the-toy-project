@@ -19,7 +19,7 @@
       <a href="{% url 'article_edited' %}"><button type="button" class="btn btn-primary">Edited page</button></a>
     </div>
     <div class="row">
-      {% if writers %}
+      {% if articles %}
         <table class="table">
           <thead>
           <tr>
@@ -29,11 +29,11 @@
           </tr>
           </thead>
           <tbody>
-          {% for writer in writers %}
+          {% for article in articles %}
             <tr>
-              <th scope="row">{{ writer.name }}</th>
-              <td>{{ writer.written_count }}</td>
-              <td>{{ writer.written_count_last_thirty }}</td>
+              <th scope="row">{{ article.written_by__name }}</th>
+              <td>{{ article.written_count }}</td>
+              <td>{{ article.written_count_last_thirty }}</td>
             </tr>
           {% endfor %}
           </tbody>

@@ -15,12 +15,12 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["writers"] = Article.objects.values("written_by").annotate(
+        context["articles"] = Article.objects.values("written_by__name").annotate(
             written_count=Count(F("written_by")),
             written_count_last_thirty=Count(
                 Case(
                     When(
-                        created_at__lt=timezone.now() - timedelta(days=30),
+                        created_at__gt=timezone.now() - timedelta(days=30),
                         then=1
                     )
                 )
@@ -36,6 +36,12 @@ class ArticleCreate(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("dashboard")
+
+    def form_valid(self, form):
+        http_response = super().form_valid(form)
+        self.object.written_by = self.request.user.writer
+        self.object.save(update_fields=["written_by"])
+        return http_response
 
 
 class ArticleApproval(PermissionRequiredMixin, TemplateView):
