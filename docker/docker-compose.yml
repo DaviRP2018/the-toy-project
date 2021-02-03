@@ -3,7 +3,7 @@ version: '3.6'
 services:
   postgres:
     container_name: blog_postgres
-    image: postgres:latest
+    image: postgres:13.1
     environment:
       POSTGRES_USER: davi
       POSTGRES_PASSWORD: davi
@@ -18,7 +18,7 @@ services:
 
   redis:
     container_name: blog_redis
-    image: redis:latest
+    image: redis:6.0.9
     restart: on-failure
     ports:
       - "6379:6379"
