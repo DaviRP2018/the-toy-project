@@ -1,12 +1,12 @@
 from datetime import timedelta
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
 
-from blog.models import Article, Writer
+from blog.models import Article
 
 
 class DashboardView(TemplateView):
@@ -36,19 +36,27 @@ class ArticleCreate(LoginRequiredMixin, CreateView):
         return reverse("dashboard")
 
 
-class ArticleApproval(LoginRequiredMixin, TemplateView):
+class ArticleApproval(PermissionRequiredMixin, TemplateView):
     template_name = "blog/approval.html"
+    permission_denied_message = "You need to be an editor do access this page"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["articles"] = Article.objects.all()
         return context
 
+    def has_permission(self):
+        return self.request.user.writer.is_editor
 
-class ArticleEdited(LoginRequiredMixin, TemplateView):
+
+class ArticleEdited(PermissionRequiredMixin, TemplateView):
     template_name = "blog/edited.html"
+    permission_denied_message = "You need to be an editor do access this page"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["articles"] = Article.objects.all()
         return context
+
+    def has_permission(self):
+        return self.request.user.writer.is_editor
