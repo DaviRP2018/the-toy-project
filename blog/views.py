@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
@@ -31,6 +32,7 @@ class DashboardView(TemplateView):
 class ArticleCreate(LoginRequiredMixin, CreateView):
     model = Article
     fields = ["title", "content"]
+    template_name = "blog/article_form.html"
 
     def get_success_url(self):
         return reverse("dashboard")
@@ -46,7 +48,9 @@ class ArticleApproval(PermissionRequiredMixin, TemplateView):
         return context
 
     def has_permission(self):
-        return self.request.user.writer.is_editor
+        if not isinstance(self.request.user, AnonymousUser):
+            return self.request.user.writer.is_editor
+        return False
 
 
 class ArticleEdited(PermissionRequiredMixin, TemplateView):
@@ -59,4 +63,6 @@ class ArticleEdited(PermissionRequiredMixin, TemplateView):
         return context
 
     def has_permission(self):
-        return self.request.user.writer.is_editor
+        if not isinstance(self.request.user, AnonymousUser):
+            return self.request.user.writer.is_editor
+        return False

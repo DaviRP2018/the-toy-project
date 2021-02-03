@@ -12,12 +12,14 @@ class Writer(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_writer(sender, instance, created, **kwargs):
+    """Creates a writer based on the User model every time an User is created"""
     if created:
         Writer.objects.create(user=instance, name=instance.username)
 
 
 @receiver(post_save, sender=User)
 def save_user_writer(sender, instance, **kwargs):
+    """Saves the writer based on the User model every time the User is saved"""
     instance.writer.name = instance.username
     instance.writer.save()
 

@@ -8,9 +8,15 @@
       <h1>Articles</h1>
     </div>
     <div class="row">
-      <a href="{% url 'article_create' %}">Create new article</a>
-      <a href="{% url 'article_approval' %}">Approval page</a>
-      <a href="{% url 'article_edited' %}">Edited page</a>
+      <a href="{% url 'logout_writer' %}"><button type="button" class="btn btn-secondary">Logout</button></a>
+      {% if request.user.is_authenticated %}
+        <span>You are currently logged in as {{ request.user.writer.name }}</span>
+      {% endif %}
+    </div>
+    <div class="row">
+      <a href="{% url 'article_create' %}"><button type="button" class="btn btn-success">Create new article</button></a>
+      <a href="{% url 'article_approval' %}"><button type="button" class="btn btn-primary">Approval page</button></a>
+      <a href="{% url 'article_edited' %}"><button type="button" class="btn btn-primary">Edited page</button></a>
     </div>
     <div class="row">
       {% if writers %}
