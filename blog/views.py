@@ -15,10 +15,14 @@ class DashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["writers"] = Article.objects.values("written_by").annotate(
             written_count=Count(F("written_by")),
-            written_count_last_thirty=Count(Case(When(
-                created_at__lt=timezone.now() - timedelta(days=30),
-                then=1
-            )))
+            written_count_last_thirty=Count(
+                Case(
+                    When(
+                        created_at__lt=timezone.now() - timedelta(days=30),
+                        then=1
+                    )
+                )
+            ),
         )
         return context
 

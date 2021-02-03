@@ -16,20 +16,20 @@
       {% if writers %}
         <table class="table">
           <thead>
-            <tr>
-              <th scope="col">Writer</th>
-              <th scope="col">Total Articles Written</th>
-              <th scope="col">Total Articles Written Last 30</th>
-            </tr>
+          <tr>
+            <th scope="col">Writer</th>
+            <th scope="col">Total Articles Written</th>
+            <th scope="col">Total Articles Written Last 30</th>
+          </tr>
           </thead>
           <tbody>
-            {% for writer in writers %}
+          {% for writer in writers %}
             <tr>
               <th scope="row">{{ writer.name }}</th>
               <td>{{ writer.written_count }}</td>
               <td>{{ writer.written_count_last_thirty }}</td>
             </tr>
-            {% endfor %}
+          {% endfor %}
           </tbody>
         </table>
       {% else %}

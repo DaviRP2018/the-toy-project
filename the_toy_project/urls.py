@@ -18,8 +18,8 @@ from django.urls import path, include
 from blog.views import DashboardView, ArticleCreate, ArticleApproval, ArticleEdited
 
 urlpatterns = [
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', DashboardView.as_view(), name="dashboard"),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("", DashboardView.as_view(), name="dashboard"),
     path("article", ArticleCreate.as_view(), name="article_create"),
     path("article-approval", ArticleApproval.as_view(), name="article_approval"),
     path("article-edited", ArticleEdited.as_view(), name="article_edited"),

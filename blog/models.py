@@ -26,5 +26,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     status = models.BooleanField(default=False)
-    written_by = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_written_by")
+    written_by = models.ForeignKey(
+        Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_written_by"
+    )
     edited_by = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_edited_by")
