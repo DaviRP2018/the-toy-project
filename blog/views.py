@@ -65,7 +65,7 @@ class ArticleEdited(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.all()
+        context["articles"] = Article.objects.filter(edited_by=self.request.user.writer)
         return context
 
     def has_permission(self):
