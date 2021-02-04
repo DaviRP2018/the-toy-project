@@ -80,7 +80,7 @@ DATABASES = {
         "NAME":     "the_toy_project",
         "USER":     "davi",
         "PASSWORD": "davi",
-        "HOST":     "localhost",
+        "HOST":     "postgres",
         "PORT":     "5432",
     }
 }
