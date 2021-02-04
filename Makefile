@@ -12,3 +12,5 @@ flake8:
 	docker-compose exec blogapp flake8 .
 test:
 	docker-compose exec blogapp python manage.py test
+migrate:
+	docker-compose exec blogapp python manage.py migrate

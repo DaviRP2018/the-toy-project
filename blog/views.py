@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
@@ -56,12 +56,24 @@ class ArticleCreate(LoginRequiredMixin, CreateView):
 
 
 class WriterCreate(CreateView):
-    model = Writer
+    model = User
     form_class = WriterForm
     template_name = "blog/writer_form.html"
 
     def get_success_url(self):
         return reverse("dashboard")
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            # get model object data from form here
+            user = form.save(commit=False)
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_valid(self, form):
         http_response = super().form_valid(form)
