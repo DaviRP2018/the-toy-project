@@ -14,19 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
+from rest_framework import routers
 
 from blog.views import DashboardView, ArticleCreate, ArticleApproval, ArticleEdited, UpdateArticle
 from the_toy_project.views import logout_writer
 
-from rest_framework import routers
-
 router = routers.DefaultRouter()
-router.register(r'article', UpdateArticle, basename="update_article")
+router.register(r"article", UpdateArticle, basename="update_article")
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("logout", logout_writer, name="logout_writer"),
-
     path("", DashboardView.as_view(), name="dashboard"),
     path("article/", ArticleCreate.as_view(), name="article_create"),
     path("article-approval", ArticleApproval.as_view(), name="article_approval"),

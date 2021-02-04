@@ -6,8 +6,8 @@ from django.db.models import Count, F, Case, When
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
-from rest_framework import generics, permissions, viewsets, status
-from rest_framework.decorators import api_view, action
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -22,14 +22,7 @@ class DashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["articles"] = Article.objects.values("written_by__name").annotate(
             written_count=Count(F("written_by")),
-            written_count_last_thirty=Count(
-                Case(
-                    When(
-                        created_at__gt=timezone.now() - timedelta(days=30),
-                        then=1
-                    )
-                )
-            ),
+            written_count_last_thirty=Count(Case(When(created_at__gt=timezone.now() - timedelta(days=30), then=1))),
         )
         return context
 
