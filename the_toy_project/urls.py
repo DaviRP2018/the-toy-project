@@ -16,7 +16,13 @@ Including another URLconf
 from django.urls import path, include
 from rest_framework import routers
 
-from blog.views import DashboardView, ArticleCreate, ArticleApproval, ArticleEdited, UpdateArticle
+from blog.views import (
+    DashboardView,
+    ArticleCreate,
+    ArticleApproval,
+    ArticleEdited,
+    UpdateArticle,
+)
 from the_toy_project.views import logout_writer
 
 router = routers.DefaultRouter()
@@ -27,7 +33,9 @@ urlpatterns = [
     path("logout", logout_writer, name="logout_writer"),
     path("", DashboardView.as_view(), name="dashboard"),
     path("article/", ArticleCreate.as_view(), name="article_create"),
-    path("article-approval", ArticleApproval.as_view(), name="article_approval"),
+    path(
+        "article-approval", ArticleApproval.as_view(), name="article_approval"
+    ),
     path("article-edited", ArticleEdited.as_view(), name="article_edited"),
 ]
 

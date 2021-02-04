@@ -13,8 +13,18 @@ WRITER_NAMES = [
     "≤∂≥åß∂øç∂¢∞¡™ªº∂∆",
     "¨ÎÍ¨ÓÅÍ·°Î‡",
 ]
-CORRECT_PAYLOADS = [{"status": True, "edited_by": 1}, {"status": False, "edited_by": 1}]
-WRONG_PAYLOADS = [{"name": "Test"}, {"id": 2}, {"status": True}, {"edited_by": 1}, {"asd": True}, {}]
+CORRECT_PAYLOADS = [
+    {"status": True, "edited_by": 1},
+    {"status": False, "edited_by": 1},
+]
+WRONG_PAYLOADS = [
+    {"name": "Test"},
+    {"id": 2},
+    {"status": True},
+    {"edited_by": 1},
+    {"asd": True},
+    {},
+]
 
 
 class DashboardPageTests(TestCase):
@@ -89,7 +99,11 @@ class ApprovalTests(TestCase):
         for name in WRITER_NAMES:
             User.objects.create(username=name, password="123")
         for writer in Writer.objects.all():
-            Article.objects.create(title=f"title - {writer.name}", content="Hello", written_by=writer)
+            Article.objects.create(
+                title=f"title - {writer.name}",
+                content="Hello",
+                written_by=writer,
+            )
 
     def test_api(self):
         articles = Article.objects.all()
@@ -99,14 +113,18 @@ class ApprovalTests(TestCase):
             for cp in CORRECT_PAYLOADS:
                 # Correct request
                 print("\n========== Using PUT method")
-                response = self.client.put(url, data=json.dumps(cp), content_type="application/json")
+                response = self.client.put(
+                    url, data=json.dumps(cp), content_type="application/json"
+                )
                 print(cp)
                 print(f"{response.status_code} == 200")
                 self.assertEquals(response.status_code, 200)
 
                 # ========== Using POST method. Not correct
                 print("\n========== Using POST method. Not correct")
-                response = self.client.post(url, data=json.dumps(cp), content_type="application/json")
+                response = self.client.post(
+                    url, data=json.dumps(cp), content_type="application/json"
+                )
                 print(cp)
                 print(f"{response.status_code} == 405")
                 self.assertEquals(response.status_code, 405)
@@ -121,14 +139,18 @@ class ApprovalTests(TestCase):
             print("\n===== WRONG_PAYLOADS =====")
             for wp in WRONG_PAYLOADS:
                 print("\n========== Using PUT method")
-                response = self.client.put(url, data=json.dumps(wp), content_type="application/json")
+                response = self.client.put(
+                    url, data=json.dumps(wp), content_type="application/json"
+                )
                 print(wp)
                 print(f"{response.status_code} == 200")
                 self.assertNotEquals(response.status_code, 200)
 
                 # ========== Using POST method. Not correct
                 print("\n========== Using POST method. Not correct")
-                response = self.client.post(url, data=json.dumps(wp), content_type="application/json")
+                response = self.client.post(
+                    url, data=json.dumps(wp), content_type="application/json"
+                )
                 print(wp)
                 print(f"{response.status_code} == 405")
                 self.assertEquals(response.status_code, 405)

@@ -1,6 +1,9 @@
 from datetime import timedelta
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+)
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import Count, F, Case, When
 from django.urls import reverse
@@ -20,9 +23,18 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.values("written_by__name").annotate(
+        context["articles"] = Article.objects.values(
+            "written_by__name"
+        ).annotate(
             written_count=Count(F("written_by")),
-            written_count_last_thirty=Count(Case(When(created_at__gt=timezone.now() - timedelta(days=30), then=1))),
+            written_count_last_thirty=Count(
+                Case(
+                    When(
+                        created_at__gt=timezone.now() - timedelta(days=30),
+                        then=1,
+                    )
+                )
+            ),
         )
         return context
 
@@ -63,7 +75,9 @@ class ArticleEdited(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.filter(edited_by=self.request.user.writer).order_by("id")
+        context["articles"] = Article.objects.filter(
+            edited_by=self.request.user.writer
+        ).order_by("id")
         return context
 
     def has_permission(self):

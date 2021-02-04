@@ -26,7 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -55,10 +55,10 @@ ROOT_URLCONF = "the_toy_project.urls"
 
 TEMPLATES = [
     {
-        "BACKEND":  "django.template.backends.django.DjangoTemplates",
-        "DIRS":     ["templates"],
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": ["templates"],
         "APP_DIRS": True,
-        "OPTIONS":  {
+        "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -76,12 +76,12 @@ WSGI_APPLICATION = "the_toy_project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE":   "django.db.backends.postgresql",
-        "NAME":     "the_toy_project",
-        "USER":     "davi",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "the_toy_project",
+        "USER": "davi",
         "PASSWORD": "davi",
-        "HOST":     "postgres",
-        "PORT":     "5432",
+        "HOST": "postgres",
+        "PORT": "5432",
     }
 }
 
@@ -90,16 +90,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".NumericPasswordValidator",
     },
 ]
 

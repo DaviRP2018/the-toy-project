@@ -15,7 +15,8 @@ class Writer(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_writer(sender, instance, created, **kwargs):
-    """Creates a writer based on the User model every time an User is created"""
+    """Creates a writer based on the User
+    model every time an User is created"""
     if created:
         Writer.objects.create(user=instance, name=instance.username)
 
@@ -33,9 +34,19 @@ class Article(models.Model):
     content = models.TextField()
     status = models.BooleanField(default=False)
     written_by = models.ForeignKey(
-        Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_written_by"
+        Writer,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="fk_written_by",
     )
-    edited_by = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.SET_NULL, related_name="fk_edited_by")
+    edited_by = models.ForeignKey(
+        Writer,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="fk_edited_by",
+    )
 
     def __str__(self):
         return self.title
