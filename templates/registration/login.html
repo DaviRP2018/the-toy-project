@@ -1,11 +1,22 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 
 {% block title %}Login{% endblock title %}
 
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Login">
-  </form>
+  <div class="col-lg-6">
+    <div class="row my-4">
+      <a href="{% url 'dashboard' %}">
+        <button type="button" class="btn btn-primary">Back to dashboard</button>
+      </a>
+    </div>
+
+    <div class="row">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-success" type="submit" value="Login">
+      </form>
+    </div>
+  </div>
 {% endblock content %}

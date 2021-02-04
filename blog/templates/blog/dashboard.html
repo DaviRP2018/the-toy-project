@@ -11,6 +11,9 @@
       <a href="{% url 'logout_writer' %}">
         <button type="button" class="btn btn-secondary">Logout</button>
       </a>
+      <a href="{% url 'writer_create' %}">
+        <button type="button" class="btn btn-warning">Sign up</button>
+      </a>
       {% if request.user.is_authenticated %}
         <span>You are currently logged in as {{ request.user.writer.name }}</span>
       {% endif %}

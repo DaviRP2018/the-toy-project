@@ -1,7 +1,7 @@
 build:
 	docker-compose build
 up:
-	docker-compose -p the_toy_project up -d
+	docker-compose -p the_toy_project up
 ssh:
 	docker run -it blogapp /bin/bash
 server:

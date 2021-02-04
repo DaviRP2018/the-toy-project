@@ -14,7 +14,8 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from blog.models import Article
+from blog.forms import WriterForm
+from blog.models import Article, Writer
 from blog.serializers import ArticleSerializer
 
 
@@ -51,6 +52,23 @@ class ArticleCreate(LoginRequiredMixin, CreateView):
         http_response = super().form_valid(form)
         self.object.written_by = self.request.user.writer
         self.object.save(update_fields=["written_by"])
+        return http_response
+
+
+class WriterCreate(CreateView):
+    model = Writer
+    form_class = WriterForm
+    template_name = "blog/writer_form.html"
+
+    def get_success_url(self):
+        return reverse("dashboard")
+
+    def form_valid(self, form):
+        http_response = super().form_valid(form)
+        writer = Writer.objects.get(user_id=self.object.id)
+        if "is_editor" in self.request.POST:
+            writer.is_editor = True
+            writer.save(update_fields=["is_editor"])
         return http_response
 
 
@@ -95,3 +113,13 @@ class UpdateArticle(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class CreateWriter(viewsets.ViewSet):
+#     @action(detail=True, methods=["POST"])
+#     def create_writer(self, request):
+#         serializer = WriterSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

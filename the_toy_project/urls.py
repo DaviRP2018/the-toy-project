@@ -21,7 +21,7 @@ from blog.views import (
     ArticleCreate,
     ArticleApproval,
     ArticleEdited,
-    UpdateArticle,
+    UpdateArticle, WriterCreate,
 )
 from the_toy_project.views import logout_writer
 
@@ -32,6 +32,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("logout", logout_writer, name="logout_writer"),
     path("", DashboardView.as_view(), name="dashboard"),
+    path("writer/", WriterCreate.as_view(), name="writer_create"),
     path("article/", ArticleCreate.as_view(), name="article_create"),
     path(
         "article-approval", ArticleApproval.as_view(), name="article_approval"
